@@ -58,7 +58,8 @@ RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
 
 COPY Caddyfile /etc/Caddyfile
 COPY php-fpm-wrapper.sh /usr/local/bin/php-fpm-wrapper
-# COPY php.ini /etc/php5/
+RUN chomd u+x /usr/local/bin/php-fpm-wrapper
+COPY php.ini /etc/php5/
 
 VOLUME ["/root/.caddy", "/srv"]
 
