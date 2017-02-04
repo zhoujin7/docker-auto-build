@@ -9,7 +9,7 @@ if [ -f /srv/composer.lock ]; then
     composer install ${PHP_COMPOSER_FLAGS}
 fi
 
-php-fpm7
+php-fpm
 
 if [ ! -z "$PHP_AFTER" ]; then
     eval $PHP_AFTER
