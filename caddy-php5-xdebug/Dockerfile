@@ -24,7 +24,7 @@ RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
         php5-intl \
         php5-json \
         php5-mcrypt \
-       # php5-mongodb \
+        mongo-php5-driver \
         php5-openssl \
         php5-pcntl \
         php5-pdo_mysql \
