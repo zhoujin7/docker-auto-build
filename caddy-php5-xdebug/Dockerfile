@@ -48,6 +48,7 @@ RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
     && composer global require "fxp/composer-asset-plugin:^1.2.0" \
     && adduser -SDHu 1000 php \
     && sed -i "s/user *=.*$/user = php/" /etc/php5/php-fpm.conf \
+    && if [ ! -f "/etc/php5/fpm.d/www.conf" ]; then touch "/etc/php5/fpm.d/www.conf"; fi  \
     && mkdir -p /srv \
     && printf "<?php phpinfo(); ?>" > /srv/index.php \
     # caddy
