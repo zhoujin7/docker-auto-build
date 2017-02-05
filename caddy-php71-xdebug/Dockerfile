@@ -10,6 +10,11 @@ ENV PHP_BEFORE= \
 
 COPY repositories /etc/apk/
 
+RUN apk --update --no-cache add tzdata \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && apk del tzdata 
+
 # install php and other libraries
 RUN apk -U add openssl git tar curl tini openssl ssmtp \
     # dependencies for PHP extensions below
@@ -50,10 +55,6 @@ RUN apk -U add openssl git tar curl tini openssl ssmtp \
     sockets \
     xml \
     zip \
-    tzdata \
-    && echo "Asia/Shanghai" > /etc/timezone \
-    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && apk del tzdata \
     && pecl install mongodb redis \
     && docker-php-ext-enable redis mongodb \
     && apk del build-base autoconf \
