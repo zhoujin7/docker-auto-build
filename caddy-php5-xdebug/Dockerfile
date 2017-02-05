@@ -24,7 +24,6 @@ RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
         php5-intl \
         php5-json \
         php5-mcrypt \
-       # php5-mbstring \
        # php5-mongodb \
         php5-openssl \
         php5-pcntl \
@@ -33,7 +32,6 @@ RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
         php5-phar \
         php5-posix \
         php5-redis \ 
-       # php5-session \
         php5-sockets \
         php5-zlib \
         php5-xdebug \
