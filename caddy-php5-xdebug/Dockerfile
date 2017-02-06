@@ -10,8 +10,6 @@ ENV PHP_BEFORE= \
 
 RUN apk --update upgrade
 
-COPY repositories /etc/apk/
-
 # install php and other libraries
 RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
         php5-bcmath \
@@ -42,9 +40,9 @@ RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
     && ln -s /usr/bin/php5 /usr/local/bin/php \
     && echo "clear_env = no" >> /etc/php5/php-fpm.conf \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
      # I use Yii2 a lot, and it uses this composer library
     && composer global require "fxp/composer-asset-plugin:^1.2.0" \
+    && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
     && adduser -SDHu 1000 php \
     && sed -i "s/user *=.*$/user = php/" /etc/php5/php-fpm.conf \
     && if [ ! -f "/etc/php5/fpm.d/www.conf" ]; then touch "/etc/php5/fpm.d/www.conf"; fi  \
@@ -58,6 +56,7 @@ COPY Caddyfile /etc/Caddyfile
 COPY php-fpm-wrapper.sh /usr/local/bin/php-fpm-wrapper
 RUN chmod u+x /usr/local/bin/php-fpm-wrapper
 COPY php.ini /etc/php5/
+COPY repositories /etc/apk/
 
 ENV TZ=Asia/Shanghai 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
