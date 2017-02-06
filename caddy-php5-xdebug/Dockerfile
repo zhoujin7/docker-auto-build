@@ -38,9 +38,6 @@ RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
         php5-zlib \
         php5-xdebug \
         tzdata \
-    && echo "Asia/Shanghai" > /etc/timezone \
-    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && apk del tzdata \
     && rm -rf /var/cache/apk/* \
     && ln -s /usr/bin/php5 /usr/local/bin/php \
     && echo "clear_env = no" >> /etc/php5/php-fpm.conf \
@@ -61,6 +58,10 @@ COPY Caddyfile /etc/Caddyfile
 COPY php-fpm-wrapper.sh /usr/local/bin/php-fpm-wrapper
 RUN chmod u+x /usr/local/bin/php-fpm-wrapper
 COPY php.ini /etc/php5/
+
+ENV TZ=Asia/Shanghai 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
 
 VOLUME ["/root/.caddy", "/srv"]
 
