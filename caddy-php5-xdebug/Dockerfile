@@ -8,12 +8,10 @@ ENV PHP_BEFORE= \
     PHP_AFTER= \
     PHP_COMPOSER_FLAGS=
 
-COPY repositories /etc/apk/
-
-RUN apk --update upgrade
-
 # install php and other libraries
-RUN apk --update --no-cache add openssl git tar curl tini ssmtp \
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing | tee -a /etc/apk/repositories \
+    && apk --update --no-cache upgrade \
+    && apk --no-cache add openssl git tar curl tini ssmtp \
         php5-bcmath \
         php5-bz2 \
         php5-ctype \
@@ -58,6 +56,7 @@ COPY Caddyfile /etc/Caddyfile
 COPY php-fpm-wrapper.sh /usr/local/bin/php-fpm-wrapper
 RUN chmod u+x /usr/local/bin/php-fpm-wrapper
 COPY php.ini /etc/php5/
+COPY repositories /etc/apk/
 
 ENV TZ=Asia/Shanghai 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
