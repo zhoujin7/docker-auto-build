@@ -8,6 +8,8 @@ ENV PHP_BEFORE= \
     PHP_AFTER= \
     PHP_COMPOSER_FLAGS=
 
+COPY repositories /etc/apk/
+
 RUN apk --update upgrade
 
 # install php and other libraries
@@ -56,7 +58,6 @@ COPY Caddyfile /etc/Caddyfile
 COPY php-fpm-wrapper.sh /usr/local/bin/php-fpm-wrapper
 RUN chmod u+x /usr/local/bin/php-fpm-wrapper
 COPY php.ini /etc/php5/
-COPY repositories /etc/apk/
 
 ENV TZ=Asia/Shanghai 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
