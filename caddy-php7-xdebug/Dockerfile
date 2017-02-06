@@ -1,4 +1,5 @@
 FROM stevepacker/caddy-php7-xdebug
+RUN apk --update upgrade
 COPY repositories /etc/apk/
 RUN apk add --update \
     tzdata \

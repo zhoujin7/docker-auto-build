@@ -8,6 +8,8 @@ ENV PHP_BEFORE= \
     PHP_AFTER= \
     PHP_COMPOSER_FLAGS=
 
+RUN apk --update upgrade
+
 COPY repositories /etc/apk/
 
 # install php and other libraries
