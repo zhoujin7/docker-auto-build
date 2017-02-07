@@ -11,8 +11,12 @@ ENV PHP_BEFORE= \
 # install php and other libraries
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing | tee -a /etc/apk/repositories \
     && apk --update --no-cache upgrade \
-    && apk --no-cache add openssl git tar curl tini ssmtp \
-        php5-bcmath \
+    && rm -rf /var/cache/apk/*
+
+RUN apk --no-cache add openssl git tar curl tini ssmtp \
+    && rm -rf /var/cache/apk/*
+
+RUN apk --no-cache add php5-bcmath \
         php5-bz2 \
         php5-ctype \
         php5-curl \
@@ -35,9 +39,16 @@ RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing | tee -a /etc/apk/rep
         php5-sockets \
         php5-zlib \
         php5-xdebug \
-        tzdata \
-    && rm -rf /var/cache/apk/* \
-    && ln -s /usr/bin/php5 /usr/local/bin/php \
+        php5-mysqli \
+    && rm -rf /var/cache/apk/*
+
+RUN apk --no-cache add php5-mysql \
+    && rm -rf /var/cache/apk/*    
+
+RUN apk --no-cache add tzdata \
+    && rm -rf /var/cache/apk/* 
+
+RUN ln -s /usr/bin/php5 /usr/local/bin/php \
     && echo "clear_env = no" >> /etc/php5/php-fpm.conf \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
      # I use Yii2 a lot, and it uses this composer library

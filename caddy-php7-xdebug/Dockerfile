@@ -11,8 +11,12 @@ ENV PHP_BEFORE= \
 # install php and other libraries
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing | tee -a /etc/apk/repositories \
     && apk --update --no-cache upgrade \
-    && apk --no-cache add openssl git tar curl tini ssmtp \
-        php7-bcmath \
+    && rm -rf /var/cache/apk/*
+
+RUN apk --no-cache add openssl git tar curl tini ssmtp \
+    && rm -rf /var/cache/apk/*
+
+RUN apk --no-cache add php7-bcmath \
         php7-bz2 \
         php7-ctype \
         php7-curl \
@@ -37,9 +41,15 @@ RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing | tee -a /etc/apk/rep
         php7-sockets \
         php7-zlib \
         php7-xdebug \
-        tzdata \
-    && rm -rf /var/cache/apk/* \
-    && ln -s /usr/bin/php7 /usr/local/bin/php \
+    && rm -rf /var/cache/apk/*
+
+RUN apk --no-cache add php7-mysqli \
+    && rm -rf /var/cache/apk/*
+
+RUN apk --no-cache add tzdata \
+    && rm -rf /var/cache/apk/*
+
+RUN ln -s /usr/bin/php7 /usr/local/bin/php \
     && echo "clear_env = no" >> /etc/php7/php-fpm.conf \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
      # I use Yii2 a lot, and it uses this composer library
