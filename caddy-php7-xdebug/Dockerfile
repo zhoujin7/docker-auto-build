@@ -44,6 +44,7 @@ RUN apk --no-cache add php7-bcmath \
     && rm -rf /var/cache/apk/*
 
 RUN apk --no-cache add php7-mysqli \
+        php7-zip \
     && rm -rf /var/cache/apk/*
 
 RUN apk --no-cache add tzdata \

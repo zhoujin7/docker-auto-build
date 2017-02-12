@@ -43,6 +43,7 @@ RUN apk --no-cache add php5-bcmath \
     && rm -rf /var/cache/apk/*
 
 RUN apk --no-cache add php5-mysql \
+        php5-zip \
     && rm -rf /var/cache/apk/*    
 
 RUN apk --no-cache add tzdata \
