@@ -5,13 +5,13 @@ LABEL Description="Cutting-edge LAMP stack, based on Ubuntu 16.04 LTS. Includes 
 	Usage="docker run -d -p [HOST WWW PORT NUMBER]:80 -p [HOST DB PORT NUMBER]:3306 -v [HOST WWW DOCUMENT ROOT]:/var/www/html -v [HOST DB DOCUMENT ROOT]:/var/lib/mysql jin7/lamp" \
 	Version="1.0"
 
-RUN apt-get update
-RUN apt-get upgrade -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
 COPY debconf.selections /tmp/
 RUN debconf-set-selections /tmp/debconf.selections
 
-RUN apt-get install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	php7.0 \
 	php7.0-bz2 \
 	php7.0-cgi \
@@ -47,11 +47,11 @@ RUN apt-get install -y \
 	php-redis \
 	php-xdebug
 
-RUN apt-get install supervisor -y
-RUN apt-get install apache2 libapache2-mod-php7.0 -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install supervisor -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install apache2 libapache2-mod-php7.0 -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install mysql-common mysql-server mysql-client -y
-RUN apt-get install postfix -y
-RUN apt-get install nano tree vim curl -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install nano tree vim curl -y
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
 && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
@@ -67,6 +67,7 @@ COPY sources.list /etc/apt/
 COPY php.ini /etc/php/7.0/apache2/
 COPY dir.conf /etc/apache2/mods-enabled/
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY run-lamp.sh /usr/sbin/
 
 RUN a2enmod rewrite
 RUN chmod +x /usr/sbin/run-lamp.sh
