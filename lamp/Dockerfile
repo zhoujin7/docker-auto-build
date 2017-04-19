@@ -49,7 +49,7 @@ RUN apt-get install -y \
 
 RUN apt-get install supervisor -y
 RUN apt-get install apache2 libapache2-mod-php7.0 -y
-RUN apt-get install mysql-common mysql-server mysql-client -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install mysql-common mysql-server mysql-client -y
 RUN apt-get install postfix -y
 RUN apt-get install nano tree vim curl -y
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
