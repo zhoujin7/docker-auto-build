@@ -80,5 +80,5 @@ init_mysql(){
     fi
 }
 
-init_mysql()
+init_mysql();
 exec supervisord -n
