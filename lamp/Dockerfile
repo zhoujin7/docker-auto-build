@@ -16,7 +16,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.0-cli \
     php7.0-common \
     php7.0-curl \
-    php7.0-dev \
     php7.0-enchant \
     php7.0-fpm \
     php7.0-gd \
@@ -48,7 +47,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install supervisor -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install apache2 libapache2-mod-php7.0 -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install mysql-common mysql-server mysql-client -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install openssh-server -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
 
@@ -59,34 +57,27 @@ COPY index.php /var/www/html/
 COPY sources.list /etc/apt/
 COPY php.ini /etc/php/7.0/apache2/
 COPY dir.conf /etc/apache2/mods-enabled/
-COPY start-apache2.sh /usr/local/bin/
-COPY start-mysqld.sh /usr/local/bin/
 COPY run.sh /usr/local/bin/
 
 COPY supervisord-apache2.conf /etc/supervisor/conf.d/
-COPY supervisord-mysqld.conf /etc/supervisor/conf.d/
+COPY supervisord-postfix.conf /etc/supervisor/conf.d/
 COPY supervisord-sshd.conf /etc/supervisor/conf.d/
 
 RUN ln -snf /usr/share/zoneinfo/$DATE_TIMEZONE /etc/localtime
 RUN echo $DATE_TIMEZONE > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 
-RUN mkdir /var/run/sshd
-
 RUN a2enmod rewrite
 RUN sed -i 's/AllowOverride\ None/AllowOverride\ All/g' /etc/apache2/apache2.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-RUN chmod 755 /usr/local/bin/*.sh
-RUN chown -R www-data:www-data /var/www/html
+RUN mkdir /var/run/sshd
 
-RUN rm -rf /var/lib/mysql/*
+RUN chmod 755 /usr/local/bin/*.sh
 
 VOLUME /var/www/html
-VOLUME /var/lib/mysql
 
 EXPOSE 22
 EXPOSE 80
-EXPOSE 3306
 
 CMD ["/usr/local/bin/run.sh"]
