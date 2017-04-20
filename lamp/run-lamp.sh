@@ -34,8 +34,7 @@ cat << EOB
     
     **********************************************
     *                                            *
-    *    Docker image: jin7/lamp               *
-    *    https://github.com/jin7/docker-lamp   *
+    *    Docker image: jin7/lamp                 *
     *                                            *
     **********************************************
 
