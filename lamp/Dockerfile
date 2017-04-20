@@ -21,15 +21,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.0-intl \
     php7.0-json \
     php7.0-ldap \
-    php7.0-mcrypt \
     php7.0-mysql \
     php7.0-odbc \
     php7.0-opcache \
     php7.0-pgsql \
     php7.0-phpdbg \
-    php7.0-pspell \
-    php7.0-readline \
-    php7.0-recode \
     php7.0-snmp \
     snmp \
     php7.0-sqlite3 \
@@ -39,7 +35,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.0-zip \
     php7.0-mbstring \
     php-redis \
-    php-apcu \
     php-xdebug
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install supervisor -y
