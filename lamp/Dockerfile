@@ -61,7 +61,6 @@ COPY php.ini /etc/php/7.0/apache2/
 COPY dir.conf /etc/apache2/mods-enabled/
 COPY start-apache2.sh /usr/local/bin/
 COPY start-mysqld.sh /usr/local/bin/
-COPY set-mysql-password.sh /usr/local/bin/
 COPY run.sh /usr/local/bin/
 
 COPY supervisord-apache2.conf /etc/supervisor/conf.d/
@@ -81,8 +80,6 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN chmod 755 /usr/local/bin/*.sh
 RUN chown -R www-data:www-data /var/www/html
 
-RUN /usr/local/bin/set-mysql-password.sh
-RUN rm /usr/local/bin/set-mysql-password.sh
 RUN rm -rf /var/lib/mysql/*
 
 VOLUME /var/www/html
