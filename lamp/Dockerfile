@@ -4,6 +4,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
 ENV DATE_TIMEZONE Asia/Shanghai
+ENV TERM xterm
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.0 \
@@ -43,8 +44,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install supervisor -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install apache2 libapache2-mod-php7.0 -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install openssh-server -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install curl -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install curl vim-tiny -y
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
 && composer config -g repo.packagist composer https://packagist.phpcomposer.com
@@ -56,7 +56,6 @@ COPY dir.conf /etc/apache2/mods-enabled/
 COPY run.sh /usr/local/bin/
 
 COPY supervisord-apache2.conf /etc/supervisor/conf.d/
-COPY supervisord-sshd.conf /etc/supervisor/conf.d/
 
 RUN ln -snf /usr/share/zoneinfo/$DATE_TIMEZONE /etc/localtime
 RUN echo $DATE_TIMEZONE > /etc/timezone
@@ -66,13 +65,10 @@ RUN a2enmod rewrite
 RUN sed -i 's/AllowOverride\ None/AllowOverride\ All/g' /etc/apache2/apache2.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-RUN mkdir /var/run/sshd
-
 RUN chmod 755 /usr/local/bin/*.sh
 
 VOLUME /var/www/html
 
-EXPOSE 22
 EXPOSE 80
 
 CMD ["/usr/local/bin/run.sh"]
