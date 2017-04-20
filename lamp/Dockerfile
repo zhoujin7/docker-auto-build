@@ -69,6 +69,8 @@ COPY dir.conf /etc/apache2/mods-enabled/
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY run-lamp.sh /usr/sbin/
 
+RUN echo $DATE_TIMEZONE > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 RUN a2enmod rewrite
 RUN chmod +x /usr/sbin/run-lamp.sh
 RUN chown -R www-data:www-data /var/www/html

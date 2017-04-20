@@ -65,4 +65,20 @@ fi
 # if [ $LOG_LEVEL == 'debug' ]; then /usr/sbin/apachectl -DFOREGROUND -k start -e debug; else &>/dev/null /usr/sbin/apachectl -DFOREGROUND -k start; 
 # fi
 
+init_mysql(){
+    VOLUME_HOME="/var/lib/mysql"
+    # Now we are going to bind to all interfaces for easy access. Do not do this on production a server unless MySQL is secured!
+    # sed -ri -e "s/^bind-address.*/bind-address\t\t=     0\.0\.0\.0/" /etc/mysql/mysql.conf.d/mysqld.cnf 
+    if [[ ! -d $VOLUME_HOME/mysql ]]; then
+        echo "=> An empty or uninitialized MySQL volume is detected in $VOLUME_HOME"
+        echo "=> Installing MySQL ..."
+        # mysql_install_db > /dev/null 2>&1 Removed by A. Datta
+        /usr/sbin/mysqld --initialize-insecure > /dev/null 2>&1 # Line added by A. Datta
+        echo "=> Done!"  
+    else
+        echo "=> Using an existing volume of MySQL"
+    fi
+}
+
+init_mysql()
 exec supervisord -n
