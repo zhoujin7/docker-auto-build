@@ -67,12 +67,14 @@ COPY sources.list /etc/apt/
 COPY php.ini /etc/php/7.0/apache2/
 COPY dir.conf /etc/apache2/mods-enabled/
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY run-lamp.sh /usr/sbin/
+COPY start-mysqld.sh /usr/local/bin/
+COPY run-lamp.sh /usr/local/bin/
 
+RUN ln -snf /usr/share/zoneinfo/$DATE_TIMEZONE /etc/localtime
 RUN echo $DATE_TIMEZONE > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 RUN a2enmod rewrite
-RUN chmod +x /usr/sbin/run-lamp.sh
+RUN chmod +x /usr/local/bin/*.sh
 RUN chown -R www-data:www-data /var/www/html
 RUN mkdir -p /var/log/supervisor
 
