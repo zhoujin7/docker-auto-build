@@ -49,6 +49,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install supervisor -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install apache2 libapache2-mod-php7.0 -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install openssh-server -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install curl -y
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
 && composer config -g repo.packagist composer https://packagist.phpcomposer.com
