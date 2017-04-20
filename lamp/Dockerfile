@@ -81,7 +81,7 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN chmod 755 /usr/local/bin/*.sh
 RUN chown -R www-data:www-data /var/www/html
 
-RUN /bin/sh /usr/local/bin/set-mysql-password.sh
+RUN /usr/local/bin/set-mysql-password.sh
 RUN rm /usr/local/bin/set-mysql-password.sh
 RUN rm -rf /var/lib/mysql/*
 
