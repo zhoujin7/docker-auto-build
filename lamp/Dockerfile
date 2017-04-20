@@ -3,10 +3,6 @@ FROM ubuntu:xenial
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
-COPY debconf.selections /tmp/
-RUN debconf-set-selections /tmp/debconf.selections
-RUN rm /tmp/debconf.selections
-
 ENV DATE_TIMEZONE Asia/Shanghai
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -48,7 +44,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 RUN DEBIAN_FRONTEND=noninteractive apt-get install supervisor -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install apache2 libapache2-mod-php7.0 -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install openssh-server -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install curl -y
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
@@ -61,7 +56,6 @@ COPY dir.conf /etc/apache2/mods-enabled/
 COPY run.sh /usr/local/bin/
 
 COPY supervisord-apache2.conf /etc/supervisor/conf.d/
-COPY supervisord-postfix.conf /etc/supervisor/conf.d/
 COPY supervisord-sshd.conf /etc/supervisor/conf.d/
 
 RUN ln -snf /usr/share/zoneinfo/$DATE_TIMEZONE /etc/localtime
