@@ -82,4 +82,4 @@ VOLUME /var/lib/mysql
 EXPOSE 80
 EXPOSE 3306
 
-CMD ["/run.sh"]
+CMD ["/usr/local/bin/run.sh"]
