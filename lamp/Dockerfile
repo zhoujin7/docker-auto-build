@@ -5,6 +5,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
 COPY debconf.selections /tmp/
 RUN debconf-set-selections /tmp/debconf.selections
+RUN rm /tmp/debconf.selections
 
 ENV DATE_TIMEZONE Asia/Shanghai
 
@@ -48,6 +49,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 RUN DEBIAN_FRONTEND=noninteractive apt-get install supervisor -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install apache2 libapache2-mod-php7.0 -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install mysql-common mysql-server mysql-client -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install openssh-server -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
@@ -59,26 +61,34 @@ COPY php.ini /etc/php/7.0/apache2/
 COPY dir.conf /etc/apache2/mods-enabled/
 COPY start-apache2.sh /usr/local/bin/
 COPY start-mysqld.sh /usr/local/bin/
+COPY set-mysql-password.sh /usr/local/bin/
 COPY run.sh /usr/local/bin/
 
 COPY supervisord-apache2.conf /etc/supervisor/conf.d/
 COPY supervisord-mysqld.conf /etc/supervisor/conf.d/
+COPY supervisord-sshd.conf /etc/supervisor/conf.d/
 
 RUN ln -snf /usr/share/zoneinfo/$DATE_TIMEZONE /etc/localtime
 RUN echo $DATE_TIMEZONE > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 
+RUN mkdir /var/run/sshd
+
 RUN a2enmod rewrite
 RUN sed -i 's/AllowOverride\ None/AllowOverride\ All/g' /etc/apache2/apache2.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-RUN rm -rf /var/lib/mysql/*
 
 RUN chmod 755 /usr/local/bin/*.sh
 RUN chown -R www-data:www-data /var/www/html
 
+RUN /bin/sh /usr/local/bin/set-mysql-password.sh
+RUN rm /usr/local/bin/set-mysql-password.sh
+RUN rm -rf /var/lib/mysql/*
+
 VOLUME /var/www/html
 VOLUME /var/lib/mysql
 
+EXPOSE 22
 EXPOSE 80
 EXPOSE 3306
 
