@@ -3,7 +3,7 @@ FROM ubuntu:xenial
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
-ENV DATE_TIMEZONE Asia/Shanghai
+ENV TZ Asia/Shanghai
 ENV TERM xterm
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -52,8 +52,8 @@ COPY run.sh /usr/local/bin/
 
 COPY supervisord-apache2.conf /etc/supervisor/conf.d/
 
-RUN ln -snf /usr/share/zoneinfo/$DATE_TIMEZONE /etc/localtime
-RUN echo $DATE_TIMEZONE > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
+RUN echo $TZ > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 
 RUN a2enmod rewrite
