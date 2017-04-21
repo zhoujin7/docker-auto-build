@@ -26,8 +26,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.0-opcache \
     php7.0-pgsql \
     php7.0-phpdbg \
-    php7.0-snmp \
-    snmp \
     php7.0-sqlite3 \
     php7.0-tidy \
     php7.0-xmlrpc \
