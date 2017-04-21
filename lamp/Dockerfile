@@ -50,7 +50,7 @@ COPY php.ini /etc/php/7.0/apache2/
 COPY dir.conf /etc/apache2/mods-enabled/
 COPY run.sh /usr/local/bin/
 
-##COPY supervisord.conf /etc/supervisor/conf.d/
+COPY supervisord.conf /etc/supervisor/conf.d/
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 RUN echo $TZ > /etc/timezone
