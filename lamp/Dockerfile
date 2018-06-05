@@ -45,6 +45,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY index.php /var/www/html/
 COPY sources.list /etc/apt/
 COPY php.ini /etc/php/7.0/apache2/
+COPY apache2/apache2.conf /etc/apache2/
 COPY apache2/dir.conf /etc/apache2/mods-enabled/
 COPY apache2/000-default.conf /etc/apache2/sites-enabled/
 COPY run.sh /usr/local/bin/
