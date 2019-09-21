@@ -16,6 +16,8 @@ RUN apk --no-cache add tzdata \
 
 COPY --from=GO_BUILD /go/src/lute-http/lute-http /root/lute-http
 
+RUN chmod 755 /root/lute-http
+
 EXPOSE 8249
 
 ENTRYPOINT [ "/root/lute-http" ]
