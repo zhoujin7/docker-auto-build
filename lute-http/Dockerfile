@@ -20,4 +20,4 @@ RUN chmod 755 /root/lute-http
 
 EXPOSE 8249
 
-ENTRYPOINT [ "/root/lute-http" ]
+CMD [ "/root/lute-http" ]
