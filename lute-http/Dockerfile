@@ -3,7 +3,7 @@ FROM golang:alpine as GO_BUILD
 RUN apk --no-cache add git
 RUN git clone https://github.com/b3log/lute-http.git /go/src/lute-http
 WORKDIR /go/src/lute-http
-sed -i "s/127\.0\.0\.1:8249/0\.0\.0\.0:8249/g" main.go
+RUN sed -i "s/127\.0\.0\.1:8249/0\.0\.0\.0:8249/g" main.go
 RUN go build -i -v
 
 FROM alpine:latest
