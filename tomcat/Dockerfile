@@ -1,8 +1,8 @@
 FROM tomcat:alpine
 
-ENV TZ Asia/Shanghai
 ENV TERM xterm
+ENV TZ Asia/Shanghai
 
-RUN apk --update add tzdata && \
+RUN apk --no-cache add tzdata && \
 cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
 apk del tzdata

@@ -3,8 +3,8 @@ FROM ubuntu:xenial
 RUN DEBIAN_FRONTEND=noninteractive apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
-ENV TZ Asia/Shanghai
 ENV TERM xterm
+ENV TZ Asia/Shanghai
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php7.0 \
