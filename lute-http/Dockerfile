@@ -1,7 +1,7 @@
 FROM golang:alpine as GO_BUILD
 
 RUN apk --no-cache add git
-RUN git clone https://github.com/zhoujin7/lute-http.git /go/src/lute-http
+RUN git clone https://github.com/b3log/lute-http.git /go/src/lute-http
 WORKDIR /go/src/lute-http
 RUN go build -i -v
 
