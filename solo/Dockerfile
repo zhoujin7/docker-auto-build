@@ -24,6 +24,7 @@ ENV TZ=Asia/Shanghai
 COPY --from=GO_BUILD /go/src/github.com/b3log/lute-http/lute-http /opt/lute-http/lute-http
 COPY --from=MVN_BUILD /opt/solo/ /opt/solo/
 COPY solo.conf /etc/monit.d/
+RUN chmod 600 /etc/monit.d/*.conf
 
 EXPOSE 8080
 
