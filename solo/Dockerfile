@@ -1,0 +1,26 @@
+FROM golang:alpine as GO_BUILD
+WORKDIR /go/src/github.com/b3log/lute-http/
+ADD . /go/src/github.com/b3log/lute-http/
+ENV GO111MODULE=on
+RUN apk add --no-cache gcc musl-dev git && go build -i -v
+
+FROM maven:3-jdk-8-alpine as MVN_BUILD
+WORKDIR /opt/solo/
+ADD . /tmp
+RUN cd /tmp && mvn package -DskipTests -Pci && mv target/solo/* /opt/solo/ \
+    && cp -f /tmp/src/main/resources/docker/* /opt/solo/WEB-INF/classes/
+
+
+FROM openjdk:8-alpine
+LABEL maintainer="zhoujin7<zhoujin7@foxmail.com>"
+
+RUN apk add --no-cache ca-certificates tzdata monit
+ENV TZ=Asia/Shanghai
+
+COPY --from=GO_BUILD /go/src/github.com/b3log/lute-http/lute-http /opt/lute-http/lute-http
+COPY --from=MVN_BUILD /opt/solo/ /opt/solo/
+COPY solo.conf /etc/monit.d/
+
+EXPOSE 8080
+
+ENTRYPOINT ["monit", "-I"]
