@@ -1,8 +1,10 @@
 FROM golang:alpine as GO_BUILD
-RUN apk --no-cache add git
+RUN apk --no-cache add gcc musl-dev git
 RUN git clone https://github.com/b3log/lute-http.git /go/src/github.com/b3log/lute-http
 WORKDIR /go/src/github.com/b3log/lute-http/
 RUN sed -i "s/127\.0\.0\.1:8249/0\.0\.0\.0:8249/g" main.go
+ENV GO111MODULE=on
+go env -w GOPROXY=https://goproxy.io,direct
 RUN go build -i -v
 
 FROM maven:3-jdk-8-alpine as MVN_BUILD
