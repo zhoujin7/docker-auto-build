@@ -1,12 +1,13 @@
 FROM golang:alpine as GO_BUILD
+RUN apk --no-cache add git
+RUN go get github.com/b3log/lute-http
 WORKDIR /go/src/github.com/b3log/lute-http/
-ADD . /go/src/github.com/b3log/lute-http/
 ENV GO111MODULE=on
 RUN apk add --no-cache gcc musl-dev git && go build -i -v
 
 FROM maven:3-jdk-8-alpine as MVN_BUILD
 WORKDIR /opt/solo/
-ADD . /tmp
+RUN git clone https://github.com/b3log/solo.git /tmp --depth=1
 RUN cd /tmp && mvn package -DskipTests -Pci && mv target/solo/* /opt/solo/ \
     && cp -f /tmp/src/main/resources/docker/* /opt/solo/WEB-INF/classes/
 
