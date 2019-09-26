@@ -16,8 +16,8 @@ check process lute-http matching "/opt/lute-http/lute-http"
     if 2 restarts within 2 cycles then timeout
 
 check process solo matching "java"
-    depends on lute-http
     start program = "/bin/sh -c '/opt/solo/start-solo.sh'" with timeout 10 seconds
     stop program = "/bin/sh -c '/opt/solo/stop-solo.sh'"
     if failed port 8080 protocol http then restart
     if 2 restarts within 2 cycles then timeout
+    depends on lute-http
