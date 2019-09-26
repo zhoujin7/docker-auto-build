@@ -10,14 +10,14 @@ set httpd port 2812 and
 
 
 check process lute-http matching "/opt/lute-http/lute-http"
-    start program = "/bin/sh -c '/opt/lute-http/start-lute-http.sh'" with timeout 10 seconds
-    stop program = "/bin/sh -c '/opt/lute-http/stop-lute-http.sh'"
+    start program = "/bin/sh -c '/opt/lute-http/start-lute-http.sh'" with timeout 5 seconds
+    stop program = "/bin/sh -c '/opt/lute-http/stop-lute-http.sh'" with timeout 5 seconds
     if failed port 8249 protocol http then restart
     if 2 restarts within 2 cycles then timeout
 
-check process solo matching "java"
-    start program = "/bin/sh -c '/opt/solo/start-solo.sh'" with timeout 10 seconds
-    stop program = "/bin/sh -c '/opt/solo/stop-solo.sh'"
+check process solo matching "java -cp WEB-INF/lib/\*:WEB-INF/classes org\.b3log\.solo\.Starter"
+    start program = "/bin/sh -c '/opt/solo/start-solo.sh'" with timeout 5 seconds
+    stop program = "/bin/sh -c '/opt/solo/stop-solo.sh'" with timeout 5 seconds
     if failed port 8080 protocol http then restart
     if 2 restarts within 2 cycles then timeout
     depends on lute-http
