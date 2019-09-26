@@ -23,6 +23,15 @@ ENV TZ=Asia/Shanghai
 
 COPY --from=GO_BUILD /go/src/github.com/b3log/lute-http/lute-http /opt/lute-http/lute-http
 COPY --from=MVN_BUILD /opt/solo/ /opt/solo/
+
+ENV solo_listen_port=8080
+ENV solo_server_scheme=https
+ENV solo_server_host=zhoujin7.com
+ENV solo_server_port=
+
+RUN sed -i 's/if failed port 8080 protocol http then restart/if failed port $solo_listen_port protocol http then restart/g' .monitrc
+RUN sed -i 's/--listen_port=8080 --server_scheme=https --server_host=zhoujin7\.com --server_port=/--listen_port=$solo_listen_port --server_scheme=$solo_server_scheme --server_host=$solo_server_host --server_port=$solo_server_port/g' start-solo.sh
+
 COPY .monitrc /root/
 COPY *-lute-http.sh /opt/lute-http/
 COPY *-solo.sh /opt/solo/
