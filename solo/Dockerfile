@@ -1,15 +1,16 @@
 FROM golang:alpine as GO_BUILD
 RUN apk --no-cache add gcc musl-dev git
-RUN git clone https://github.com/b3log/lute-http.git /go/src/github.com/b3log/lute-http
+RUN git clone https://github.com/b3log/lute-http.git /go/src/github.com/b3log/lute-http --depth=1
 WORKDIR /go/src/github.com/b3log/lute-http/
 ENV GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.io,direct
 RUN go build -i -v
 
 FROM maven:3-jdk-8-alpine as MVN_BUILD
-WORKDIR /opt/solo/
 RUN apk --no-cache add git
-RUN git clone https://github.com/b3log/solo.git /tmp
+RUN git clone https://github.com/b3log/solo.git /tmp --depth=1
+RUN git clone https://github.com/b3log/solo-skins.git /tmp/src/main/webapp/skins --depth=1
+WORKDIR /opt/solo/
 RUN cd /tmp && mvn package -DskipTests -Pci && mv target/solo/* /opt/solo/ \
     && cp -f /tmp/src/main/resources/docker/* /opt/solo/WEB-INF/classes/
 
