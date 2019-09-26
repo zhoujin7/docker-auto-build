@@ -10,7 +10,7 @@ RUN go build -i -v
 FROM maven:3-jdk-8-alpine as MVN_BUILD
 WORKDIR /opt/solo/
 RUN apk --no-cache add git
-RUN git clone https://github.com/b3log/solo.git /tmp --depth=1
+RUN git clone https://github.com/b3log/solo.git /tmp
 RUN cd /tmp && mvn package -DskipTests -Pci && mv target/solo/* /opt/solo/ \
     && cp -f /tmp/src/main/resources/docker/* /opt/solo/WEB-INF/classes/
 
