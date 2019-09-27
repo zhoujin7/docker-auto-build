@@ -29,12 +29,11 @@ ENV solo_server_scheme=https
 ENV solo_server_host=zhoujin7.com
 ENV solo_server_port=
 
-RUN sed -i 's/if failed port 8080 protocol http then restart/if failed port $solo_listen_port protocol http then restart/g' .monitrc
-RUN sed -i 's/--listen_port=8080 --server_scheme=https --server_host=zhoujin7\.com --server_port=/--listen_port=$solo_listen_port --server_scheme=$solo_server_scheme --server_host=$solo_server_host --server_port=$solo_server_port/g' start-solo.sh
-
 COPY .monitrc /root/
 COPY *-lute-http.sh /opt/lute-http/
 COPY *-solo.sh /opt/solo/
+RUN sed -i 's/if failed port 8080 protocol http then restart/if failed port $solo_listen_port protocol http then restart/g' /root/.monitrc
+RUN sed -i 's/--listen_port=8080 --server_scheme=https --server_host=zhoujin7\.com --server_port=/--listen_port=$solo_listen_port --server_scheme=$solo_server_scheme --server_host=$solo_server_host --server_port=$solo_server_port/g' /opt/solo/start-solo.sh
 RUN chmod 600 /root/.monitrc
 RUN chmod +x /opt/lute-http/*.sh
 RUN chmod +x /opt/solo/*.sh
