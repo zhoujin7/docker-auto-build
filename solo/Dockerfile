@@ -2,6 +2,7 @@ FROM golang:alpine as GO_BUILD
 RUN apk --no-cache add gcc musl-dev git
 RUN git clone https://github.com/b3log/lute-http.git /go/src/github.com/b3log/lute-http --depth=1
 WORKDIR /go/src/github.com/b3log/lute-http/
+RUN sed -i "s/engine := lute\.New()/engine := lute.New(func(lute *lute.Lute) { lute.FixTermTypo = false })/g" main.go
 ENV GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.io,direct
 RUN go build -i -v
