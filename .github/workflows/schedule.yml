@@ -1,0 +1,33 @@
+name: Trigger a new build
+
+on:
+  schedule:
+  - cron: '0 16 * * *'
+
+jobs:
+  trigger-a-new-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Modify 'build-trigger' file
+      run: |
+        if cat build-trigger | grep 'Trigger a new build' > /dev/null; then
+            echo '' > build-trigger
+        else
+            echo 'Trigger a new build' > build-trigger
+        fi
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git commit -m "Trigger a new build"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
